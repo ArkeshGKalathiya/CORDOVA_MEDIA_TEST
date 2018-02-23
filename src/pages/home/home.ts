@@ -28,5 +28,7 @@ export class HomePage {
         this.onPlay();
       }
     });
+
+    audioObj.play();
   }
 }
