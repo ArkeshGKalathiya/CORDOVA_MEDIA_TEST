@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { Media, MediaObject, MEDIA_STATUS } from '@ionic-native/media';
 
 @Component({
   selector: 'page-home',
@@ -15,18 +14,25 @@ export class HomePage {
   ];
 
   private currentTrack: number = 0;
-  constructor(public navCtrl: NavController, private media: Media) {
+  constructor(public navCtrl: NavController) {
 
   }
   
   onPlay(): void {
-    let audioObj = this.media.create(this.tracks[this.currentTrack]);
-    audioObj.onStatusUpdate.subscribe((status) => {
-      if (status === MEDIA_STATUS.STOPPED) {
+    let audioObj = new window['Media'](this.tracks[this.currentTrack], (a) => {
+      console.log('first', a);
+    }, (a) => {
+      console.log('second', a);
+    }, (a) => {
+      console.log('third', a);
+      if (a === 4) {
+        console.log('song has been finished');
         audioObj.release();
         this.currentTrack++;
         this.onPlay();
       }
+    }, {
+      automaticallyWaitsToMinimizeStalling: 'no'
     });
 
     audioObj.play();
